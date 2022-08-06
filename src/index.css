@@ -4,6 +4,9 @@
   box-sizing: border-box;
 
 }
+select,i,option{
+  cursor: pointer;
+}
 .h1{
   font-size: 25px;
 }
