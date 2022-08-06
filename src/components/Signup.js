@@ -16,7 +16,6 @@ export default function Signup() {
     if (await SIGNUPAUTH(newusercredentials))
       history.push('/');
   }
-  console.log(newusercredentials.Password === '' || newusercredentials.Name === '' || newusercredentials.Email === '' || !newusercredentials.Email.includes('@') || newusercredentials.Role === 'none')
   return (
     <div className="container m-auto col-md-7">
       <form className='m-1 p-1' onSubmit={newusercredentialslogin}>

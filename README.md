@@ -1,70 +1,38 @@
-# Getting Started with Create React App
+more details about this project on
+https://helioweb.notion.site/helioweb/Full-Stack-Developer-Intern-task-45fbaec1f6b74b30a897085763882216
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Project Details :-
+There are two major components of the system, **USERS** and **TASKS.**
 
-## Available Scripts
+Users are people who can create tasks and update their status. Every user has a role associated. We have two types of user roles, “**ADMIN”** and “**TM USER”.**
 
-In the project directory, you can run:
+Every user can create a task and assign it to another user. The assigned user will be able to update the task status and finally set it to complete. The assignee user can UPDATE or DELETE the task and can CLOSE the task once it is completed.
 
-### `npm start`
+**ADMIN** on other hand will be able to perform all the operations on the given task.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+> ***We will see the complete flow through an example step by step***
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+## Functionalities of the application
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Any user (be it **ADMIN** or **TM USER**) can create a task as per the above task model and assign it to another **TM USER**.[ NOTE: **TM USER** cannot assign a task to **ADMIN,** assigned users cannot reassign task to another user] 
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. By default, the status logs will only show created status.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+> For example consider 3 Users **Ramesh, Bhavya and Ankit.** Suppose **Ramesh and Bhavya** are **TM Users** and **Ankit** is **ADMIN.  Suppose Ramesh** Creates a task and assigns it to **Bhavya**. The following will be the entry in the database
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. The assigned User can only update the status of the tasks to either **IN PROGRESS** or **COMPLETED.** [NOTE: **Bhavya** will not be able to update any other thing in the task except status]
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. The statuses will be added to the array of status logs
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+> For example, (in continuation with the previous example) now **Bhavya** can change the status of the task to **IN PROGRESS** or **COMPLETED.**
+On any change in status, the entry in the mongoose collection will look like as shown below
 
-## Learn More
+> **Ramesh** will be able to update the task and its status. He can also delete the task. **Ramesh** would be able to CLOSE the task. Once the task is closed, **Bhavya and Ramesh** can no longer update the task status. A task with closed status would look like as shown below
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+5. Admin will be able to create, update task and its status and will be able to close the task

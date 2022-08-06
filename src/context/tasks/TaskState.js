@@ -3,10 +3,10 @@ import TaskContext from "./TaskContext";
 const TaskState = (props) => {
 
     const [usertasks, settasks] = useState([])
-
+    const URL ='http://52.41.128.88:4040'; //backend url
     //read task
     const fetchtasks = async () => {
-        let response = await fetch(`http://localhost:4000/api/task/viewtask`, { method: 'get', headers: { 'authToken': localStorage.getItem('authToken') } });
+        let response = await fetch(`${URL}/api/task/viewtask`, { method: 'get', headers: { 'authToken': localStorage.getItem('authToken') } });
         const newtaskresponse = await response.json();
         if (newtaskresponse.success)
             settasks(newtaskresponse.data)
@@ -19,7 +19,7 @@ const TaskState = (props) => {
     //add task 
     const createTask = async (newtask) => {
         const jsontask = JSON.stringify(newtask)
-        const response = await fetch(`http://localhost:4000/api/task/createtask`, {
+        const response = await fetch(`${URL}/api/task/createtask`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const TaskState = (props) => {
 
     // delete task
     const deletetask = async (deletetaskid) => {
-        const newtaskresponse = await fetch(`http://localhost:4000/api/task/delete/${deletetaskid}`, {
+        const newtaskresponse = await fetch(`${URL}/api/task/delete/${deletetaskid}`, {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const TaskState = (props) => {
     const [temptask, settemptask] = useState('null')
     const updatestatustask = async (id, log) => {
         const jsonlog = JSON.stringify(log)
-        const response = await fetch(`http://localhost:4000/api/task/status/${id}`, {
+        const response = await fetch(`${URL}/api/task/status/${id}`, {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',

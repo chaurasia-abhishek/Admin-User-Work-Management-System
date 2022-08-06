@@ -3,6 +3,8 @@ import UserContext from "./UserContext";
 const UserState = (props) => {
     //islogin
     const [loginstatus, setloginstatus] = useState(false)
+    
+    const URL ='http://52.41.128.88:4040'; //backend url
 
     //loginned user detail
     const [USER, SETUSER] = useState({ Name: 'absf' })
@@ -10,13 +12,13 @@ const UserState = (props) => {
 
     //users detalils
     const fetchusers = async () => {
-        let response = await fetch(`http://localhost:4000/api/user/viewuser`, { method: 'get', headers: { 'authToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJlYzFjMDhlOWE3ZTc4MDkxNjdjNzNkIn0sImlhdCI6MTY1OTY4MjkyMX0.78lkR-1yz-DdQqJ3ehvMuBnQF7FaDwBXLiPzJAryeS8' } });
+        let response = await fetch(`${URL}/api/user/viewuser`, { method: 'get', headers: { 'authToken': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjJlYzFjMDhlOWE3ZTc4MDkxNjdjNzNkIn0sImlhdCI6MTY1OTY4MjkyMX0.78lkR-1yz-DdQqJ3ehvMuBnQF7FaDwBXLiPzJAryeS8' } });
         let data = await response.json();
             setalluseres(data.teamUsers)
     }
     //fetching current user details
     const FETCHUSER = async () => {
-        let response = await fetch(`http://localhost:4000/api/user/fetchuser`, { method: 'post', headers: { 'authToken': localStorage.getItem('authToken') } });
+        let response = await fetch(`${URL}/api/user/fetchuser`, { method: 'post', headers: { 'authToken': localStorage.getItem('authToken') } });
         let data = await response.json();
         if (data.success) {
             SETUSER(data.user)
@@ -30,7 +32,7 @@ const UserState = (props) => {
     //user login auth
     const USERAUTH = async (usercredentials) => {
         const jsonusercredentialslogin = JSON.stringify(usercredentials)
-        const response = await fetch(`http://localhost:4000/api/user/login`, {
+        const response = await fetch(`${URL}/api/user/login`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: jsonusercredentialslogin
@@ -48,7 +50,7 @@ const UserState = (props) => {
     //mew user signup auth
     const SIGNUPAUTH = async (newusercredentials) => {
         const jsonnewusercredentialslogin = JSON.stringify(newusercredentials)
-        const response = await fetch(`http://localhost:4000/api/user/signup`, {
+        const response = await fetch(`${URL}/api/user/signup`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: jsonnewusercredentialslogin
