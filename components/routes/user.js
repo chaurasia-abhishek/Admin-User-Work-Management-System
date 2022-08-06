@@ -38,7 +38,7 @@ router.post('/signup', [
             user: { id: newUser.id }
         }
         const authToken = jwt.sign(data, jwt_string)
-        res.json({ authToken, status: true })
+        res.json({ authToken, success: true })
     } catch (error) {
         console.error(error.message)
         return res.status(500).json({ success: status, msg: 'Internal server error ', error: error.message });
@@ -75,7 +75,7 @@ router.post('/login', [
             user: { id: currentUser.id }
         }
         const authToken = jwt.sign(data, jwt_string)
-        res.json({ authToken, status: true })
+        res.json({ authToken, success: true })
 
     } catch (error) {
         console.error(error.message)
@@ -89,7 +89,7 @@ router.post('/fetchuser', fetchUserId, async (req, res) => {
         //sending user detail as a response to logined user
         const userId = req.user.id;
         const user = await UserSchema.findById(userId).select('-Password')
-        res.json({ user, status: true })
+        res.json({ user, success: true })
 
     } catch (error) {
         console.error(error.message)
@@ -114,13 +114,13 @@ router.delete('/deleteuser/:id', fetchUserId, async (req, res) => {
     const user = await UserSchema.findByIdAndUpdate(req.user.id);
     //if user is not an admin
     if (user===null || user.Role !== 'Admin')
-        return res.status(400).json({ success: false, msg: 'you don`t have permission to delete the task' })
+        return res.status(400).json({ success: status, msg: 'you don`t have permission to delete the task' })
     try {
         //sending team details Name-Role-onWork
         const userDelete = await UserSchema.findByIdAndDelete(req.params.id)
         //if user is not found
         if (userDelete === null)
-            return res.status(400).json({ success: false, msg: 'invalid user id, user not found' })
+            return res.status(400).json({ success: status, msg: 'invalid user id, user not found' })
         res.status(200).json({ success: true, userDelete })
 
     } catch (error) {
