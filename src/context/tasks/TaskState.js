@@ -7,8 +7,13 @@ const TaskState = (props) => {
     //read task
     const fetchtasks = async () => {
         let response = await fetch(`http://localhost:4000/api/task/viewtask`, { method: 'get', headers: { 'authToken': localStorage.getItem('authToken') } });
-        const t = await response.json();
-        settasks(t.data)
+        const newtaskresponse = await response.json();
+        if (newtaskresponse.success)
+            settasks(newtaskresponse.data)
+        else {
+            triggeralert({ type: 'danger', msg: newtaskresponse.msg ? newtaskresponse.msg : 'Unable to fetch notes' })
+        }
+
     }
 
     //add task 
@@ -22,27 +27,35 @@ const TaskState = (props) => {
             },
             body: jsontask
         });
-        let newtaskresponse = await response.json()
-        settasks(usertasks.concat(newtaskresponse.data))
-        triggeralert({ type: 'success', msg: 'task is successfully added' })
+        const newtaskresponse = await response.json()
+        if (newtaskresponse.success) {
+            settasks(usertasks.concat(newtaskresponse.data))
+            triggeralert({ type: 'success', msg: newtaskresponse.msg ? newtaskresponse.msg : 'task is successfully added' })
+        }
+        else
+            triggeralert({ type: 'danger', msg: 'unable to add task' })
     }
 
     // delete task
     const deletetask = async (deletetaskid) => {
-        await fetch(`http://localhost:4000/api/task/delete/${deletetaskid}`, {
+        const newtaskresponse = await fetch(`http://localhost:4000/api/task/delete/${deletetaskid}`, {
             method: 'delete',
             headers: {
                 'Content-Type': 'application/json',
                 'authToken': localStorage.getItem('authToken')
             }
         });
-        settasks(usertasks.filter((task) => { return task._id !== deletetaskid }))
-        triggeralert({ type: 'success', msg: 'task is successfully deleted' })
+        if (newtaskresponse.success) {
+            settasks(usertasks.filter((task) => { return task._id !== deletetaskid }))
+            triggeralert({ type: 'success', msg: 'task is successfully deleted' })
+        }
+        else
+            triggeralert({ type: 'danger', msg: newtaskresponse.msg ? newtaskresponse.msg : 'unable to delete the task' })
     }
 
     // //temp task use in edit task
     const [temptask, settemptask] = useState('null')
-    const updatestatustask = async(id,log) => {
+    const updatestatustask = async (id, log) => {
         const jsonlog = JSON.stringify(log)
         const response = await fetch(`http://localhost:4000/api/task/status/${id}`, {
             method: 'put',
@@ -52,9 +65,13 @@ const TaskState = (props) => {
             },
             body: jsonlog
         });
-        await response.json()
-        await fetchtasks();
-        triggeralert({ type: 'success', msg: 'task log status is successfully changed' })
+        const newtaskresponse = await response.json()
+        if (newtaskresponse.success) {
+            await fetchtasks();
+            triggeralert({ type: 'success', msg: 'task log status is successfully changed' })
+        }
+        else
+            triggeralert({ type: 'danger', msg: newtaskresponse.msg ? newtaskresponse.msg : 'unable to change task log status' })
     }
 
     //alert module
@@ -74,6 +91,5 @@ const TaskState = (props) => {
             {props.children}
         </TaskContext.Provider>
     )
-
 }
 export default TaskState;

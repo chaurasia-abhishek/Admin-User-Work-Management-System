@@ -4,8 +4,8 @@ import UserContext from '../context/users/UserContext';
 
 
 export default function Signup() {
-  const { triggeralert } = useContext(UserContext)
-  const [newusercredentials, setnewusercredentials,] = useState({ Email: '', Password: '', Name: '', Role: '' })
+  const { SIGNUPAUTH } = useContext(UserContext)
+  const [newusercredentials, setnewusercredentials,] = useState({ Email: '', Password: '', Name: '', Role: 'none' })
   let history = useHistory();
 
   const onchange = (event) => {
@@ -13,22 +13,10 @@ export default function Signup() {
   }
   const newusercredentialslogin = async (event) => {
     event.preventDefault();
-    const jsonnewusercredentialslogin = JSON.stringify(newusercredentials)
-    const response = await fetch(`http://localhost:4000/api/user/signup`, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: jsonnewusercredentialslogin
-    });
-    const logintoken = await response.json()
-    if (logintoken.success) {
-      localStorage.setItem('authToken', logintoken.authToken)
-      history.push("/")
-      triggeralert({ type: 'success', msg: 'Signup successfully' })
-    }
-    else
-      triggeralert({ type: 'danger', msg: logintoken.msg ? logintoken.msg : logintoken.error })
+    if (await SIGNUPAUTH(newusercredentials))
+      history.push('/');
   }
-
+  console.log(newusercredentials.Password === '' || newusercredentials.Name === '' || newusercredentials.Email === '' || !newusercredentials.Email.includes('@') || newusercredentials.Role === 'none')
   return (
     <div className="container m-auto col-md-7">
       <form className='m-1 p-1' onSubmit={newusercredentialslogin}>
@@ -46,14 +34,14 @@ export default function Signup() {
           <input autoComplete="off" type="Password" className={`form-control ${newusercredentials.Password.length > 0 && newusercredentials.Password.length < 3 ? 'border-danger' : ''}`} name='Password' value={newusercredentials.Password} onChange={onchange} id="exampleInputPassword1" />
         </div>
         <div className="mb-3">
-          <select className={`form-select `}  name="Role" id="Role" value={newusercredentials.Role} onChange={onchange}>
+          <select className={`form-select `} name="Role" id="Role" value={newusercredentials.Role} onChange={onchange}>
             <option value='none'>Select Role</option>
             <option value="Admin">Admin</option>
             <option value="Team Member" >Team Member</option>
           </select>
         </div>
 
-        <button type='submit' className="btn btn-primary" disabled={newusercredentials.Password === '' || newusercredentials.Name === '' || newusercredentials.Email === '' || !newusercredentials.Email.includes('@') || newusercredentials.Role==='none'} >SignUp</button>
+        <button type='submit' className="btn btn-primary" disabled={newusercredentials.Password === '' || newusercredentials.Name === '' || newusercredentials.Email === '' || !newusercredentials.Email.includes('@') || newusercredentials.Role === 'none'} >SignUp</button>
       </form>
     </div>
   )
