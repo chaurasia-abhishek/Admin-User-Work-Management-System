@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import UserContext from '../context/users/UserContext'
 import TaskContext from '../context/tasks/TaskContext'
@@ -7,7 +7,18 @@ export default function Navbar() {
   const { loginstatus, setloginstatus } = useContext(UserContext)
   const { triggeralert } = useContext(TaskContext)
   const history = useHistory();
-
+useEffect(()=>{
+  //jsfortoggle--mediaquery
+  let navitems1234 = document.querySelectorAll('#navbarSupportedContent>ul>li,#navbarSupportedContent>div>ul> a,li')
+  let navbartoggle1234 = document.getElementById('navbarSupportedContent')
+  if (window.matchMedia("(max-width: 991px)").matches) {
+    Array.from(navitems1234).forEach((Element) => {
+      Element.addEventListener('click', () => {
+        navbartoggle1234.classList.remove('show')
+      })
+    })
+  }
+},[]) 
   return (
     <nav className="navbar navbar-dark navbar-expand-lg bg-dark p-1" id='navbar'>
       <div className="container-fluid ">
@@ -29,9 +40,9 @@ export default function Navbar() {
           </ul>
           <div className="d-flex">
             <ul className="navbar-nav">
-              {loginstatus && <li className="btn btn-primary mx-1 px-1 m-1" onClick={() => { localStorage.removeItem('authToken'); history.push("/login"); setloginstatus(false); triggeralert({ type: 'success', msg: 'Logout successfully' }) }}>Logout</li>}
-              {!loginstatus && <Link className="btn btn-primary mx-1 px-1 m-1" to="/login">Login</Link>}
-              {!loginstatus && <Link className="btn btn-primary mx-1 px-1 m-1" to="/signup">Sign Up</Link>}
+              <li style={{display : !loginstatus?'none':''}} className="btn btn-primary mx-1 px-1 m-1" onClick={() => { localStorage.removeItem('authToken'); history.push("/login"); setloginstatus(false); triggeralert({ type: 'success', msg: 'Logout successfully' }) }}>Logout</li>
+              <Link style={{display : loginstatus?'none':''}} className="btn btn-primary mx-1 px-1 m-1" to="/login">Login</Link>
+              <Link style={{display : loginstatus?'none':''}} className="btn btn-primary mx-1 px-1 m-1" to="/signup">Sign Up</Link>
             </ul>
           </div>
         </div>

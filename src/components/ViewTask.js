@@ -34,7 +34,7 @@ const ViewTask = () => {
                     </div>
                 </div>
             </div>
-            <div className="row w-100 mt-5">
+            <div className="row w-100 mt-5 container">
                 {temptask.statusLogs.map((log, i) => <Logs log={log} key={i} />)}
             </div>
         </div>
